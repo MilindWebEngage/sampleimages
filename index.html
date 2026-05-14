@@ -304,7 +304,7 @@
     </style>
 </head>
 <body>
-    <h1>Lifecycle Campaign Simulator</h1>
+    <h1>Lifecycle Campaign Simulator v1</h1>
     <p class="subtitle">Configure lifecycle rules and see when campaigns will show or get blocked</p>
 
     <div class="container">
@@ -370,7 +370,7 @@
 
             <div class="field">
                 <label>Allowed Days (uncheck to block on that day)</label>
-                <div class="days-row">
+                <div class="days-row" id="daysRow">
                     <label class="day-check"><input type="checkbox" value="Mon"> Mon</label>
                     <label class="day-check"><input type="checkbox" value="Tue"> Tue</label>
                     <label class="day-check"><input type="checkbox" value="Wed"> Wed</label>
@@ -586,7 +586,7 @@
             const triggerGapUnit = document.getElementById('triggerGapUnit').value;
 
             // Allowed days
-            const dayCheckboxes = document.querySelectorAll('.day-check input[type="checkbox"]');
+            const dayCheckboxes = document.querySelectorAll('#daysRow input[type="checkbox"]');
             const allowedDays = [];
             dayCheckboxes.forEach(cb => { if (cb.checked) allowedDays.push(cb.value); });
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
