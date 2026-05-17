@@ -262,12 +262,6 @@
                     <div class="cycle-sub" id="cycleHSub">
                         <label style="font-size:11px; color:#aaa; margin-bottom:4px; display:block;">Allowed time slots (add multiple)</label>
                         <div id="timeSlots">
-                            <div class="time-slot-row">
-                                <select class="slot-from hour-select"></select>
-                                <span style="color:#aaa; font-size:12px;">to</span>
-                                <select class="slot-to hour-select"></select>
-                                <button class="slot-remove" onclick="this.parentElement.remove(); validateAllSlots();">✕</button>
-                            </div>
                         </div>
                         <button class="slot-add" onclick="addTimeSlot()">+ Add time slot</button>
                     </div>
@@ -333,30 +327,62 @@
         <!-- SIMULATE PANEL -->
         <div class="panel">
             <h2>Simulate</h2>
-            <div class="field">
-                <label>Trigger count</label>
-                <input type="number" id="triggerCount" value="30" min="1" max="500">
-            </div>
-            <div class="field">
-                <label>Gap between triggers</label>
-                <div class="field-row">
-                    <input type="number" id="triggerGap" value="1" min="1">
-                    <select id="triggerGapUnit">
-                        <option value="min">Min</option>
-                        <option value="hour" selected>Hour</option>
-                        <option value="day">Day</option>
-                    </select>
+
+            <!-- Auto Simulator -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <span class="collapse-icon">▶</span>
+                    <span>Auto (bulk triggers)</span>
+                </div>
+                <div class="collapsible-content" style="display:none;">
+                    <div class="field">
+                        <label>Trigger count</label>
+                        <input type="number" id="triggerCount" value="30" min="1" max="500">
+                    </div>
+                    <div class="field">
+                        <label>Gap between triggers</label>
+                        <div class="field-row">
+                            <input type="number" id="triggerGap" value="1" min="1">
+                            <select id="triggerGapUnit">
+                                <option value="min">Min</option>
+                                <option value="hour" selected>Hour</option>
+                                <option value="day">Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Start time</label>
+                        <input type="datetime-local" id="startTime">
+                    </div>
+                    <div class="field">
+                        <label>Click on trigger # (0 = no click)</label>
+                        <input type="number" id="clickOnTrigger" value="0" min="0">
+                    </div>
+                    <button class="btn" onclick="simulate()">Run Auto Simulation</button>
                 </div>
             </div>
-            <div class="field">
-                <label>Start time</label>
-                <input type="datetime-local" id="startTime">
+
+            <!-- Custom Simulator -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <span class="collapse-icon">▶</span>
+                    <span>Custom (one-by-one)</span>
+                </div>
+                <div class="collapsible-content" style="display:none;">
+                    <div class="field">
+                        <label>Trigger date & time</label>
+                        <input type="datetime-local" id="customTriggerTime">
+                    </div>
+                    <div class="field">
+                        <label style="display:flex; align-items:center; gap:8px; text-transform:none;">
+                            <input type="checkbox" id="customIsClick" style="width:16px; height:16px; accent-color:#4a3aff;">
+                            This trigger is a click
+                        </label>
+                    </div>
+                    <button class="btn" onclick="customTrigger()">Trigger</button>
+                    <button class="btn" style="background:#ff4757; margin-top:6px;" onclick="customReset()">Reset</button>
+                </div>
             </div>
-            <div class="field">
-                <label>Click on trigger # (0 = no click)</label>
-                <input type="number" id="clickOnTrigger" value="0" min="0">
-            </div>
-            <button class="btn" onclick="simulate()">Run Simulation</button>
         </div>
 
         <!-- RESULTS PANEL -->
@@ -385,17 +411,40 @@
             return html;
         }
 
-        // Populate initial slot
-        document.querySelectorAll('.slot-from.hour-select').forEach(el => { el.innerHTML = getHourOptionsHTML('08:00'); });
-        document.querySelectorAll('.slot-to.hour-select').forEach(el => { el.innerHTML = getHourOptionsHTML('09:00'); });
+        // Populate initial slots (none by default)
 
         // Add time slot function
         function addTimeSlot() {
-            const error = validateAndAddSlot('09:00', '10:00');
-            if (error) {
-                alert(error);
-                return;
+            // Find next available non-overlapping slot
+            const existing = getTimeSlots();
+            let fromHour = 8;
+            let toHour = 9;
+
+            if (existing.length > 0) {
+                // Find the latest end time and start after it
+                const latestEnd = Math.max(...existing.map(s => s.toMin));
+                fromHour = Math.floor(latestEnd / 60);
+                toHour = fromHour + 1;
+                if (toHour > 23) {
+                    alert('No more available hours to add.');
+                    return;
+                }
             }
+
+            const fromVal = String(fromHour).padStart(2, '0') + ':00';
+            const toVal = String(toHour).padStart(2, '0') + ':00';
+
+            // Add directly without overlap check (we calculated a safe slot)
+            const container = document.getElementById('timeSlots');
+            const row = document.createElement('div');
+            row.className = 'time-slot-row';
+            row.innerHTML = `
+                <select class="slot-from hour-select">${getHourOptionsHTML(fromVal)}</select>
+                <span style="color:#aaa; font-size:12px;">to</span>
+                <select class="slot-to hour-select">${getHourOptionsHTML(toVal)}</select>
+                <button class="slot-remove" onclick="this.parentElement.remove(); validateAllSlots();">✕</button>
+            `;
+            container.appendChild(row);
         }
 
         function validateAndAddSlot(fromVal, toVal) {
@@ -796,6 +845,179 @@
 
         function unitLabel(unit) {
             switch(unit) { case 'Min': return 'min'; case 'H': return 'hour'; case 'D': return 'day'; case 'W': return 'week'; case 'M': return 'month'; case 'Y': return 'year'; }
+        }
+
+        // ===== CUSTOM SIMULATOR =====
+        let customStorage = {};
+        let customTotalViews = 0;
+        let customTotalClicks = 0;
+        let customRepeatBucketCurrent = null;
+        let customRepeatViewCount = 0;
+        let customTimeline = [];
+
+        // Set default custom trigger time
+        document.getElementById('customTriggerTime').value = localISO;
+
+        function customReset() {
+            customStorage = {};
+            customTotalViews = 0;
+            customTotalClicks = 0;
+            customRepeatBucketCurrent = null;
+            customRepeatViewCount = 0;
+            customTimeline = [];
+            document.getElementById('results').innerHTML = `<h2>Results</h2><p style="color:#888; margin-top:12px;">Custom simulator reset. Click Trigger to start.</p>`;
+        }
+
+        function customTrigger() {
+            const triggerTime = new Date(document.getElementById('customTriggerTime').value);
+            const isClick = document.getElementById('customIsClick').checked;
+            const totalMaxView = parseInt(document.getElementById('totalMaxView').value);
+            const repeatMultiplier = parseInt(document.getElementById('repeatMultiplier').value) || 1;
+            const repeatBucketUnit = document.getElementById('repeatBucket').value;
+            const repeatMaxView = parseInt(document.getElementById('repeatMaxView').value);
+
+            // Get active cycle levels
+            const levels = [];
+            ['H','D','W','M'].forEach(id => {
+                if (document.getElementById('enable' + id).checked) {
+                    levels.push({ unit: id, max: parseInt(document.getElementById('max' + id).value) });
+                }
+            });
+
+            // Filters
+            const dayCheckboxes = document.querySelectorAll('#daysRow input[type="checkbox"]');
+            const allowedDays = [];
+            dayCheckboxes.forEach(cb => { if (cb.checked) allowedDays.push(cb.value); });
+            const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const timeSlots = getTimeSlots();
+
+            // Init storage for new levels
+            levels.forEach(l => {
+                if (!customStorage[l.unit]) {
+                    customStorage[l.unit] = { currentBucket: null, viewCount: 0 };
+                }
+            });
+
+            // Reset buckets per level
+            levels.forEach(l => {
+                const bucket = computeBucket(triggerTime, l.unit);
+                if (customStorage[l.unit].currentBucket !== bucket) {
+                    customStorage[l.unit].currentBucket = bucket;
+                    customStorage[l.unit].viewCount = 0;
+                }
+            });
+
+            // Repeat bucket
+            const rBucket = computeRepeatBucket(triggerTime, repeatBucketUnit, repeatMultiplier);
+            if (customRepeatBucketCurrent !== rBucket) {
+                customRepeatBucketCurrent = rBucket;
+                customRepeatViewCount = 0;
+            }
+
+            // Check logic
+            let blocked = false;
+            let reason = '';
+
+            const triggerDay = dayNames[triggerTime.getDay()];
+            if (allowedDays.length > 0 && !allowedDays.includes(triggerDay)) {
+                blocked = true;
+                reason = `Not allowed day (${triggerDay})`;
+            } else if (!isInTimeSlot(triggerTime, timeSlots)) {
+                blocked = true;
+                reason = `Not in allowed time slot (${String(triggerTime.getHours()).padStart(2,'0')}:${String(triggerTime.getMinutes()).padStart(2,'0')})`;
+            } else if (totalMaxView > 0 && customTotalViews >= totalMaxView) {
+                blocked = true;
+                reason = `Total limit (${customTotalViews}/${totalMaxView})`;
+            } else if (customTotalClicks >= 1) {
+                blocked = true;
+                reason = `Clicked — cycle ended`;
+            } else if (repeatMaxView > 0 && customRepeatViewCount >= repeatMaxView) {
+                blocked = true;
+                reason = `Repeat cycle full (${customRepeatViewCount}/${repeatMaxView})`;
+            } else {
+                for (const l of levels) {
+                    if (l.max > 0 && customStorage[l.unit].viewCount >= l.max) {
+                        blocked = true;
+                        reason = `${unitLabel(l.unit)} limit (${customStorage[l.unit].viewCount}/${l.max})`;
+                        break;
+                    }
+                }
+            }
+
+            if (!blocked) {
+                levels.forEach(l => { customStorage[l.unit].viewCount++; });
+                customTotalViews++;
+                customRepeatViewCount++;
+                if (isClick) customTotalClicks++;
+
+                const parts = levels.map(l => `${l.unit}:${customStorage[l.unit].viewCount}/${l.max > 0 ? l.max : '∞'}`);
+                reason = parts.join(' | ') + ` | Total:${customTotalViews}`;
+            }
+
+            customTimeline.push({ time: triggerTime, shown: !blocked, reason, isClick });
+
+            // Render
+            renderCustomResults(levels);
+
+            // Uncheck click checkbox after trigger
+            document.getElementById('customIsClick').checked = false;
+        }
+
+        function renderCustomResults(levels) {
+            const totalMaxView = parseInt(document.getElementById('totalMaxView').value);
+            const repeatMultiplier = parseInt(document.getElementById('repeatMultiplier').value) || 1;
+            const repeatBucketUnit = document.getElementById('repeatBucket').value;
+            const repeatMaxView = parseInt(document.getElementById('repeatMaxView').value);
+            const dayCheckboxes = document.querySelectorAll('#daysRow input[type="checkbox"]');
+            const allowedDays = [];
+            dayCheckboxes.forEach(cb => { if (cb.checked) allowedDays.push(cb.value); });
+            const timeSlots = getTimeSlots();
+
+            let html = `<h2>Custom Simulation</h2>`;
+            html += `<div class="summary">`;
+            html += `<span class="key">Active levels:</span> `;
+            html += levels.map(l => `<span class="value">${l.max > 0 ? l.max : '∞'}/${unitLabel(l.unit)}</span>`).join(' → ');
+            const repeatLabel = repeatMultiplier > 1 ? `${repeatMultiplier} ${unitLabel(repeatBucketUnit)}s` : unitLabel(repeatBucketUnit);
+            html += `<br><span class="key">Repeat:</span> every <span class="value">${repeatLabel}</span>`;
+            if (repeatMaxView > 0) html += ` | max <span class="value">${repeatMaxView}</span> views per repeat`;
+            if (totalMaxView > 0) html += `<br><span class="key">Total max:</span> <span class="value">${totalMaxView}</span>`;
+            if (allowedDays.length > 0) html += `<br><span class="key">Days:</span> <span class="value">${allowedDays.join(', ')}</span>`;
+            if (timeSlots.length > 0) {
+                const slotStrs = timeSlots.map(s => {
+                    const fh = String(Math.floor(s.fromMin/60)).padStart(2,'0');
+                    const fm = String(s.fromMin%60).padStart(2,'0');
+                    const th = String(Math.floor(s.toMin/60)).padStart(2,'0');
+                    const tm = String(s.toMin%60).padStart(2,'0');
+                    return `${fh}:${fm}–${th}:${tm}`;
+                });
+                html += `<br><span class="key">Time slots:</span> <span class="value">${slotStrs.join(', ')}</span>`;
+            }
+            html += `<br><br><span class="key">Shown:</span> <span class="value">${customTimeline.filter(t=>t.shown).length}</span> | <span class="key">Blocked:</span> <span class="value">${customTimeline.filter(t=>!t.shown).length}</span>`;
+            html += `</div>`;
+
+            html += `<div class="storage-key"><span class="label">Storage (current):</span>${JSON.stringify(customStorage, null, 2)}</div>`;
+
+            html += `<div class="timeline"><h3>Timeline</h3>`;
+            html += `<div class="timeline-row header"><span>Time</span><span>Status</span><span>Details</span></div>`;
+
+            let prevDay = null;
+            for (const entry of customTimeline) {
+                const day = entry.time.toLocaleDateString();
+                if (prevDay !== null && day !== prevDay) {
+                    html += `<div class="timeline-separator"><span>${day}</span></div>`;
+                }
+                prevDay = day;
+
+                const cls = entry.shown ? 'show' : 'block';
+                html += `<div class="timeline-row ${cls}">`;
+                html += `<span>${formatTime(entry.time)}</span>`;
+                html += `<span><span class="badge ${cls}">${entry.shown ? 'SHOW' : 'BLOCK'}</span>${entry.isClick ? ' 👆' : ''}</span>`;
+                html += `<span class="reason">${entry.reason}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
+
+            document.getElementById('results').innerHTML = html;
         }
     </script>
 </body>
