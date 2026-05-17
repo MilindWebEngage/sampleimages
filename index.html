@@ -255,8 +255,8 @@
                     <p style="color:#888; font-size:12px; margin-bottom:12px;">Enable levels and set max views. All active levels must pass.</p>
 
                     <div class="cycle-row" id="cycleH">
-                        <input type="checkbox" id="enableH" checked>
-                        <input type="number" id="maxH" value="0" min="0">
+                        <input type="checkbox" id="enableH">
+                        <input type="number" id="maxH" value="0" min="0" disabled>
                         <span class="cycle-label">per <strong>Hour</strong></span>
                     </div>
                     <div class="cycle-sub" id="cycleHSub">
@@ -273,8 +273,8 @@
                     </div>
 
                     <div class="cycle-row" id="cycleD">
-                        <input type="checkbox" id="enableD" checked>
-                        <input type="number" id="maxD" value="0" min="0">
+                        <input type="checkbox" id="enableD">
+                        <input type="number" id="maxD" value="0" min="0" disabled>
                         <span class="cycle-label">per <strong>Day</strong></span>
                     </div>
                     <div class="cycle-sub" id="cycleDSub">
@@ -550,10 +550,8 @@
 
         updateRepeatBucketOptions();
         // Set initial active state and sub visibility
-        document.getElementById('cycleH').classList.add('active');
-        document.getElementById('cycleD').classList.add('active');
-        document.getElementById('cycleHSub').style.display = 'block';
-        document.getElementById('cycleDSub').style.display = 'block';
+        document.getElementById('cycleHSub').style.display = 'none';
+        document.getElementById('cycleDSub').style.display = 'none';
 
         function computeRepeatBucket(date, unit, multiplier) {
             const y = date.getFullYear();
