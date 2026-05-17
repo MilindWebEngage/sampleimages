@@ -5,528 +5,597 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lifecycle Campaign Simulator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
+            background: #f5f7fa;
+            color: #333;
             padding: 24px;
             min-height: 100vh;
         }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #00d4aa;
-        }
-
-        .subtitle {
-            color: #888;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 360px 280px 1fr;
-            gap: 24px;
-            width: 100%;
-        }
-
-        .config-panel {
-            background: #16213e;
+        h1 { font-size: 24px; margin-bottom: 8px; color: #4a3aff; }
+        .subtitle { color: #888; margin-bottom: 24px; font-size: 14px; }
+        .container { display: grid; grid-template-columns: 400px 280px 1fr; gap: 24px; width: 100%; }
+        .panel {
+            background: #fff;
             border-radius: 12px;
             padding: 24px;
-            border: 1px solid #2a2a4a;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-
-        .config-panel h2 {
-            font-size: 16px;
-            margin-bottom: 16px;
-            color: #00d4aa;
-        }
-
-        .field {
-            margin-bottom: 16px;
-        }
-
-        .field label {
-            display: block;
-            font-size: 12px;
-            color: #aaa;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .repeat-field label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: none;
-            font-size: 14px;
-            color: #eee;
-        }
-
-        .repeat-field label input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #00d4aa;
-        }
-
+        .panel h2 { font-size: 16px; margin-bottom: 16px; color: #4a3aff; }
         .section-header {
-            font-size: 11px;
-            color: #00d4aa;
-            letter-spacing: 1px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            margin-top: 16px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #2a2a4a;
+            font-size: 11px; color: #4a3aff; letter-spacing: 1px;
+            font-weight: 600; margin-bottom: 10px; margin-top: 16px;
+            padding-bottom: 6px; border-bottom: 1px solid #e2e8f0;
         }
 
-        .field input, .field select {
-            width: 100%;
-            padding: 10px 12px;
-            background: #0f3460;
-            border: 1px solid #2a2a4a;
-            border-radius: 8px;
-            color: #eee;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .field input:focus, .field select:focus {
-            border-color: #00d4aa;
-        }
-
-        .field-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background: #00d4aa;
-            color: #1a1a2e;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .btn:hover {
-            background: #00b894;
-        }
-
-        .results-panel {
-            background: #16213e;
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid #2a2a4a;
-            overflow-y: auto;
-            max-height: 85vh;
-        }
-
-        .results-panel h2 {
-            font-size: 16px;
+        .collapsible-section {
             margin-bottom: 8px;
-            color: #00d4aa;
-        }
-
-        .summary {
-            background: #0f3460;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            font-size: 13px;
-            line-height: 1.8;
+            overflow: hidden;
         }
 
-        .summary .key {
-            color: #888;
-        }
-
-        .summary .value {
-            color: #00d4aa;
-            font-weight: 600;
-        }
-
-        .timeline {
-            margin-top: 16px;
-        }
-
-        .timeline h3 {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 12px;
-        }
-
-        .timeline-row {
-            display: grid;
-            grid-template-columns: 200px 60px 140px 1fr;
+        .collapsible-header {
+            display: flex;
+            align-items: center;
             gap: 8px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
-        .timeline-row.header {
-            color: #888;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #2a2a4a;
-            padding-bottom: 8px;
-            margin-bottom: 8px;
-        }
-
-        .timeline-row.show {
-            background: rgba(0, 212, 170, 0.1);
-        }
-
-        .timeline-row.block {
-            background: rgba(255, 71, 87, 0.1);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .badge.show {
-            background: #00d4aa;
-            color: #1a1a2e;
-        }
-
-        .badge.block {
-            background: #ff4757;
-            color: #fff;
-        }
-
-        .reason {
-            color: #888;
-            font-size: 12px;
-        }
-
-        .scope-tag {
-            display: inline-block;
-            background: #533483;
-            color: #ddd;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            margin-left: 4px;
-        }
-
-        .storage-key {
-            margin-top: 16px;
-            background: #0f3460;
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 12px;
-            color: #ffd43b;
-            word-break: break-all;
-        }
-
-        .storage-key .label {
-            color: #888;
-            font-family: -apple-system, sans-serif;
-            font-size: 11px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .days-row {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 6px;
-        }
-
-        .day-check {
-            display: flex !important;
-            align-items: center;
-            gap: 4px;
-            background: #0f3460;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 12px !important;
-            color: #eee !important;
-            text-transform: none !important;
+            padding: 12px 14px;
+            background: #f8fafc;
             cursor: pointer;
-            border: 1px solid #2a2a4a;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            user-select: none;
         }
 
-        .day-check input[type="checkbox"] {
-            width: 14px !important;
-            height: 14px;
-            accent-color: #00d4aa;
+        .collapsible-header:hover {
+            background: #f0eeff;
         }
 
-        .timeline-separator {
+        .collapse-icon {
+            font-size: 10px;
+            color: #4a3aff;
+            transition: transform 0.2s;
+        }
+
+        .collapsible-header.open .collapse-icon {
+            transform: rotate(90deg);
+        }
+
+        .collapsible-content {
+            padding: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .field { margin-bottom: 14px; }
+        .field label {
+            display: block; font-size: 12px; color: #666;
+            margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .field input, .field select {
+            width: 100%; padding: 8px 10px; background: #f8fafc;
+            border: 1px solid #e2e8f0; border-radius: 8px;
+            color: #333; font-size: 14px; outline: none;
+        }
+        .field input:focus, .field select:focus { border-color: #4a3aff; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn {
+            width: 100%; padding: 12px; background: #4a3aff; color: #fff;
+            border: none; border-radius: 8px; font-size: 14px;
+            font-weight: 600; cursor: pointer; margin-top: 8px;
+        }
+        .btn:hover { background: #3b2ee0; }
+
+        /* Cycle row */
+        .cycle-row {
+            display: grid; grid-template-columns: auto 80px 1fr;
+            gap: 8px; align-items: center; padding: 8px 12px;
+            background: #f8fafc; border-radius: 8px; margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .cycle-row.active { border-color: #4a3aff; background: #f0eeff; }
+        .cycle-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #4a3aff; }
+        .cycle-row input[type="number"] {
+            width: 70px; padding: 6px 8px; background: #fff;
+            border: 1px solid #e2e8f0; border-radius: 6px;
+            color: #333; font-size: 13px; text-align: center;
+        }
+        .cycle-row .cycle-label { font-size: 13px; color: #333; }
+
+        .cycle-sub {
+            margin: -4px 0 8px 28px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .time-slot-row {
             display: flex;
             align-items: center;
-            margin: 12px 0;
-            gap: 12px;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        .timeline-separator::before,
-        .timeline-separator::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #533483;
+        .time-slot-row input[type="time"] {
+            padding: 5px 8px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            color: #333;
+            font-size: 12px;
+            width: 90px;
         }
 
-        .timeline-separator span {
+        .slot-remove {
+            background: none;
+            border: none;
+            color: #ff4757;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 6px;
+        }
+
+        .slot-add {
+            background: none;
+            border: 1px dashed #e2e8f0;
+            color: #4a3aff;
             font-size: 11px;
-            color: #a855f7;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .slot-add:hover {
+            border-color: #4a3aff;
+        }
+
+        .hour-select {
+            padding: 5px 8px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            color: #333;
+            font-size: 12px;
+            width: 80px;
+        }
+
+        /* Days */
+        .days-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+        .day-check {
+            display: flex !important; align-items: center; gap: 4px;
+            background: #f8fafc; padding: 5px 8px; border-radius: 6px;
+            font-size: 11px !important; color: #333 !important;
+            text-transform: none !important; cursor: pointer; border: 1px solid #e2e8f0;
+        }
+        .day-check input[type="checkbox"] { width: 12px !important; height: 12px; accent-color: #4a3aff; }
+
+        /* Results */
+        .results-panel { overflow-y: auto; max-height: 85vh; }
+        .summary {
+            background: #f8fafc; border-radius: 8px; padding: 16px;
+            margin-bottom: 16px; font-size: 13px; line-height: 1.8;
+            border: 1px solid #e2e8f0;
+        }
+        .summary .key { color: #888; }
+        .summary .value { color: #4a3aff; font-weight: 600; }
+        .timeline { margin-top: 16px; }
+        .timeline h3 { font-size: 14px; color: #666; margin-bottom: 12px; }
+        .timeline-row {
+            display: grid; grid-template-columns: 200px 60px 1fr;
+            gap: 8px; padding: 8px 12px; border-radius: 6px;
+            font-size: 13px; align-items: center; margin-bottom: 4px;
+        }
+        .timeline-row.header {
+            color: #888; font-size: 11px; text-transform: uppercase;
+            letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px; margin-bottom: 8px;
+        }
+        .timeline-row.show { background: rgba(74, 58, 255, 0.05); }
+        .timeline-row.block { background: rgba(255, 71, 87, 0.05); }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .badge.show { background: #4a3aff; color: #fff; }
+        .badge.block { background: #ff4757; color: #fff; }
+        .reason { color: #888; font-size: 12px; }
+        .timeline-separator {
+            display: flex; align-items: center; margin: 12px 0; gap: 12px;
+        }
+        .timeline-separator::before, .timeline-separator::after {
+            content: ''; flex: 1; height: 1px; background: #e2e8f0;
+        }
+        .timeline-separator span {
+            font-size: 11px; color: #4a3aff; font-weight: 600;
+            letter-spacing: 0.5px; white-space: nowrap;
+        }
+        .storage-key {
+            margin-top: 16px; background: #f8fafc; border-radius: 8px;
+            padding: 12px 16px; font-family: 'SF Mono', monospace;
+            font-size: 12px; color: #333; word-break: break-all;
+            border: 1px solid #e2e8f0;
+        }
+        .storage-key .label {
+            color: #888; font-family: -apple-system, sans-serif;
+            font-size: 11px; display: block; margin-bottom: 4px;
         }
     </style>
 </head>
 <body>
-    <h1>Lifecycle Campaign Simulator v1</h1>
-    <p class="subtitle">Configure lifecycle rules and see when campaigns will show or get blocked</p>
+    <h1>Lifecycle Campaign Simulator</h1>
+    <p class="subtitle">Multi-level cycle configuration — all levels checked simultaneously</p>
 
     <div class="container">
-        <div class="config-panel">
-            <h2>Configuration</h2>
+        <!-- CONFIG PANEL -->
+        <div class="panel">
+            <h2>Lifecycle</h2>
 
-            <!-- 1. Total max view for campaign -->
-            <div class="section-header">LIFECYCLE</div>
-            <div class="field">
-                <label>Total max views for campaign (0 = unlimited)</label>
-                <input type="number" id="totalMaxView" value="0" min="0">
-            </div>
-
-            <!-- 2. Cycle: max view per cycle + bucket -->
-            <div class="section-header">CYCLE</div>
-            <div class="field">
-                <label>Max views per cycle (0 = unlimited, click always ends cycle)</label>
-                <input type="number" id="maxPerBucket" value="2" min="0">
-            </div>
-
-            <div class="field">
-                <label>Cycle bucket (time unit)</label>
-                <select id="frequencyUnit" style="width: 100%;">
-                    <option value="Min">Minute</option>
-                    <option value="H" selected>Hour</option>
-                    <option value="D">Day</option>
-                    <option value="W">Week</option>
-                    <option value="M">Month</option>
-                    <option value="Y">Year</option>
-                </select>
-            </div>
-
-            <!-- 3. Repeat cycle -->
-            <div class="section-header">REPEAT</div>
-            <div class="field repeat-field">
-                <label>
-                    <input type="checkbox" id="repeatEnabled" checked>
-                    Repeat the cycle every
-                </label>
-                <div class="field-row" style="margin-top: 8px; grid-template-columns: 60px 1fr;">
-                    <input type="number" id="repeatMultiplier" value="1" min="1" style="text-align: center;">
-                    <select id="repeatBucket">
-                        <option value="Min">Minute</option>
-                        <option value="H">Hour</option>
-                        <option value="D" selected>Day</option>
-                        <option value="W">Week</option>
-                        <option value="M">Month</option>
-                        <option value="Y">Year</option>
-                    </select>
+            <!-- Section 1: Max View -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <span class="collapse-icon">▶</span>
+                    <span>Campaign Max View</span>
                 </div>
-                <div class="field-row" style="margin-top: 8px;">
-                    <select id="repeatMode">
-                        <option value="unlimited">Until the campaign ends</option>
-                        <option value="upto">Upto</option>
-                    </select>
-                    <div></div>
-                </div>
-                <div class="field-row" id="uptoRow" style="margin-top: 8px; display: none;">
-                    <input type="number" id="maxTotal" value="5" min="1">
-                    <span style="align-self: center; color: #aaa; font-size: 13px;">cycles</span>
+                <div class="collapsible-content" style="display:none;">
+                    <div class="field">
+                        <label>Total max views for campaign (0 = unlimited)</label>
+                        <input type="number" id="totalMaxView" value="0" min="0">
+                    </div>
                 </div>
             </div>
 
-            <div class="field">
-                <label>Allowed Days (uncheck to block on that day)</label>
-                <div class="days-row" id="daysRow">
-                    <label class="day-check"><input type="checkbox" value="Mon"> Mon</label>
-                    <label class="day-check"><input type="checkbox" value="Tue"> Tue</label>
-                    <label class="day-check"><input type="checkbox" value="Wed"> Wed</label>
-                    <label class="day-check"><input type="checkbox" value="Thu"> Thu</label>
-                    <label class="day-check"><input type="checkbox" value="Fri"> Fri</label>
-                    <label class="day-check"><input type="checkbox" value="Sat"> Sat</label>
-                    <label class="day-check"><input type="checkbox" value="Sun"> Sun</label>
+            <!-- Section 2: Cycle Levels -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <span class="collapse-icon">▶</span>
+                    <span>Cycle Levels</span>
+                </div>
+                <div class="collapsible-content" style="display:none;">
+                    <p style="color:#888; font-size:12px; margin-bottom:12px;">Enable levels and set max views. All active levels must pass.</p>
+
+                    <div class="cycle-row" id="cycleH">
+                        <input type="checkbox" id="enableH" checked>
+                        <input type="number" id="maxH" value="0" min="0">
+                        <span class="cycle-label">per <strong>Hour</strong></span>
+                    </div>
+                    <div class="cycle-sub" id="cycleHSub">
+                        <label style="font-size:11px; color:#aaa; margin-bottom:4px; display:block;">Allowed time slots (add multiple)</label>
+                        <div id="timeSlots">
+                            <div class="time-slot-row">
+                                <select class="slot-from hour-select"></select>
+                                <span style="color:#aaa; font-size:12px;">to</span>
+                                <select class="slot-to hour-select"></select>
+                                <button class="slot-remove" onclick="this.parentElement.remove(); validateAllSlots();">✕</button>
+                            </div>
+                        </div>
+                        <button class="slot-add" onclick="addTimeSlot()">+ Add time slot</button>
+                    </div>
+
+                    <div class="cycle-row" id="cycleD">
+                        <input type="checkbox" id="enableD" checked>
+                        <input type="number" id="maxD" value="0" min="0">
+                        <span class="cycle-label">per <strong>Day</strong></span>
+                    </div>
+                    <div class="cycle-sub" id="cycleDSub">
+                        <label style="font-size:11px; color:#aaa; margin-bottom:4px; display:block;">Allowed days (none = all)</label>
+                        <div class="days-row" id="daysRow">
+                            <label class="day-check"><input type="checkbox" value="Mon"> M</label>
+                            <label class="day-check"><input type="checkbox" value="Tue"> T</label>
+                            <label class="day-check"><input type="checkbox" value="Wed"> W</label>
+                            <label class="day-check"><input type="checkbox" value="Thu"> T</label>
+                            <label class="day-check"><input type="checkbox" value="Fri"> F</label>
+                            <label class="day-check"><input type="checkbox" value="Sat"> S</label>
+                            <label class="day-check"><input type="checkbox" value="Sun"> S</label>
+                        </div>
+                    </div>
+
+                    <div class="cycle-row" id="cycleW">
+                        <input type="checkbox" id="enableW">
+                        <input type="number" id="maxW" value="0" min="0" disabled>
+                        <span class="cycle-label">per <strong>Week</strong></span>
+                    </div>
+                    <div class="cycle-row" id="cycleM">
+                        <input type="checkbox" id="enableM">
+                        <input type="number" id="maxM" value="0" min="0" disabled>
+                        <span class="cycle-label">per <strong>Month</strong></span>
+                    </div>
                 </div>
             </div>
 
-            <div class="field">
-                <label>Allowed Hours (check specific hours)</label>
-                <div class="days-row" id="hoursRow">
-                    <label class="day-check"><input type="checkbox" value="0"> 0</label>
-                    <label class="day-check"><input type="checkbox" value="1"> 1</label>
-                    <label class="day-check"><input type="checkbox" value="2"> 2</label>
-                    <label class="day-check"><input type="checkbox" value="3"> 3</label>
-                    <label class="day-check"><input type="checkbox" value="4"> 4</label>
-                    <label class="day-check"><input type="checkbox" value="5"> 5</label>
-                    <label class="day-check"><input type="checkbox" value="6"> 6</label>
-                    <label class="day-check"><input type="checkbox" value="7"> 7</label>
-                    <label class="day-check"><input type="checkbox" value="8"> 8</label>
-                    <label class="day-check"><input type="checkbox" value="9"> 9</label>
-                    <label class="day-check"><input type="checkbox" value="10"> 10</label>
-                    <label class="day-check"><input type="checkbox" value="11"> 11</label>
-                    <label class="day-check"><input type="checkbox" value="12"> 12</label>
-                    <label class="day-check"><input type="checkbox" value="13"> 13</label>
-                    <label class="day-check"><input type="checkbox" value="14"> 14</label>
-                    <label class="day-check"><input type="checkbox" value="15"> 15</label>
-                    <label class="day-check"><input type="checkbox" value="16"> 16</label>
-                    <label class="day-check"><input type="checkbox" value="17"> 17</label>
-                    <label class="day-check"><input type="checkbox" value="18"> 18</label>
-                    <label class="day-check"><input type="checkbox" value="19"> 19</label>
-                    <label class="day-check"><input type="checkbox" value="20"> 20</label>
-                    <label class="day-check"><input type="checkbox" value="21"> 21</label>
-                    <label class="day-check"><input type="checkbox" value="22"> 22</label>
-                    <label class="day-check"><input type="checkbox" value="23"> 23</label>
+            <!-- Section 3: Repeat -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <span class="collapse-icon">▶</span>
+                    <span>Repeat</span>
+                </div>
+                <div class="collapsible-content" style="display:none;">
+                    <div class="field">
+                        <label>Repeat the cycle every</label>
+                        <div class="field-row" style="grid-template-columns: 60px 1fr;">
+                            <input type="number" id="repeatMultiplier" value="1" min="1" style="text-align:center;">
+                            <select id="repeatBucket">
+                                <option value="H">Hour</option>
+                                <option value="D" selected>Day</option>
+                                <option value="W">Week</option>
+                                <option value="M">Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Max views per repeat cycle (0 = unlimited)</label>
+                        <input type="number" id="repeatMaxView" value="0" min="0">
+                    </div>
                 </div>
             </div>
-
-            <div class="field">
-                <label>Campaign duration (0 = no end)</label>
-                <div class="field-row">
-                    <input type="number" id="campaignDuration" value="0" min="0">
-                    <select id="campaignDurationUnit">
-                        <option value="day">Days</option>
-                        <option value="week" selected>Weeks</option>
-                        <option value="month">Months</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn" onclick="simulate()">Simulate</button>
         </div>
 
-        <div class="config-panel">
+        <!-- SIMULATE PANEL -->
+        <div class="panel">
             <h2>Simulate</h2>
-
             <div class="field">
-                <label>Triggers (how many times campaign is triggered)</label>
-                <input type="number" id="triggerCount" value="10" min="1" max="100">
+                <label>Trigger count</label>
+                <input type="number" id="triggerCount" value="30" min="1" max="500">
             </div>
-
             <div class="field">
-                <label>Click on trigger # (0 = no click)</label>
-                <input type="number" id="clickOnTrigger" value="0" min="0">
+                <label>Gap between triggers</label>
+                <div class="field-row">
+                    <input type="number" id="triggerGap" value="1" min="1">
+                    <select id="triggerGapUnit">
+                        <option value="min">Min</option>
+                        <option value="hour" selected>Hour</option>
+                        <option value="day">Day</option>
+                    </select>
+                </div>
             </div>
-
             <div class="field">
                 <label>Start time</label>
                 <input type="datetime-local" id="startTime">
             </div>
-
             <div class="field">
-                <label>Gap between triggers</label>
-                <div class="field-row">
-                    <input type="number" id="triggerGap" value="20" min="1">
-                    <select id="triggerGapUnit">
-                        <option value="min" selected>Minutes</option>
-                        <option value="hour">Hours</option>
-                        <option value="day">Days</option>
-                    </select>
-                </div>
+                <label>Click on trigger # (0 = no click)</label>
+                <input type="number" id="clickOnTrigger" value="0" min="0">
             </div>
-
             <button class="btn" onclick="simulate()">Run Simulation</button>
         </div>
 
-        <div class="results-panel" id="results">
+        <!-- RESULTS PANEL -->
+        <div class="panel results-panel" id="results">
             <h2>Results</h2>
-            <p style="color: #888; margin-top: 12px;">Configure and click Simulate to see results.</p>
+            <p style="color: #888; margin-top: 12px;">Configure and click Run Simulation.</p>
         </div>
     </div>
 
     <script>
-        // Set default start time to now (local timezone)
+        // Collapsible sections
+        function toggleSection(header) {
+            header.classList.toggle('open');
+            const content = header.nextElementSibling;
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Generate hour options HTML
+        function getHourOptionsHTML(selectedValue) {
+            let html = '';
+            for (let h = 0; h < 24; h++) {
+                const val = String(h).padStart(2, '0') + ':00';
+                const sel = (val === selectedValue) ? ' selected' : '';
+                html += `<option value="${val}"${sel}>${String(h).padStart(2, '0')}:00</option>`;
+            }
+            return html;
+        }
+
+        // Populate initial slot
+        document.querySelectorAll('.slot-from.hour-select').forEach(el => { el.innerHTML = getHourOptionsHTML('08:00'); });
+        document.querySelectorAll('.slot-to.hour-select').forEach(el => { el.innerHTML = getHourOptionsHTML('09:00'); });
+
+        // Add time slot function
+        function addTimeSlot() {
+            const error = validateAndAddSlot('09:00', '10:00');
+            if (error) {
+                alert(error);
+                return;
+            }
+        }
+
+        function validateAndAddSlot(fromVal, toVal) {
+            const [fh, fm] = fromVal.split(':').map(Number);
+            const [th, tm] = toVal.split(':').map(Number);
+            const newFrom = fh * 60 + fm;
+            const newTo = th * 60 + tm;
+
+            if (newFrom >= newTo) {
+                return 'Start time must be before end time.';
+            }
+
+            // Check overlap with existing slots
+            const existing = getTimeSlots();
+            for (const slot of existing) {
+                if (newFrom < slot.toMin && newTo > slot.fromMin) {
+                    const sh = String(Math.floor(slot.fromMin/60)).padStart(2,'0');
+                    const sm = String(slot.fromMin%60).padStart(2,'0');
+                    const eh = String(Math.floor(slot.toMin/60)).padStart(2,'0');
+                    const em = String(slot.toMin%60).padStart(2,'0');
+                    return `Overlaps with existing slot ${sh}:${sm} – ${eh}:${em}`;
+                }
+            }
+
+            // Add the slot
+            const container = document.getElementById('timeSlots');
+            const row = document.createElement('div');
+            row.className = 'time-slot-row';
+            row.innerHTML = `
+                <select class="slot-from hour-select">${getHourOptionsHTML(fromVal)}</select>
+                <span style="color:#aaa; font-size:12px;">to</span>
+                <select class="slot-to hour-select">${getHourOptionsHTML(toVal)}</select>
+                <button class="slot-remove" onclick="this.parentElement.remove(); validateAllSlots();">✕</button>
+            `;
+            container.appendChild(row);
+            return null;
+        }
+
+        // Validate on time change
+        document.getElementById('timeSlots').addEventListener('change', function(e) {
+            if (e.target.classList.contains('slot-from') || e.target.classList.contains('slot-to')) {
+                validateAllSlots();
+            }
+        });
+
+        function validateAllSlots() {
+            const rows = document.querySelectorAll('.time-slot-row');
+            const slots = [];
+
+            rows.forEach(row => {
+                const from = row.querySelector('.slot-from').value;
+                const to = row.querySelector('.slot-to').value;
+                if (!from || !to) return;
+
+                const [fh, fm] = from.split(':').map(Number);
+                const [th, tm] = to.split(':').map(Number);
+                const fromMin = fh * 60 + fm;
+                const toMin = th * 60 + tm;
+
+                let hasOverlap = false;
+
+                if (fromMin >= toMin) {
+                    hasOverlap = true;
+                } else {
+                    for (const existing of slots) {
+                        if (fromMin < existing.toMin && toMin > existing.fromMin) {
+                            hasOverlap = true;
+                            break;
+                        }
+                    }
+                }
+
+                row.style.borderColor = hasOverlap ? '#ff4757' : 'transparent';
+                if (!hasOverlap) {
+                    slots.push({ fromMin, toMin });
+                }
+            });
+        }
+
+        // Get time slots as array of {from, to} in minutes
+        function getTimeSlots() {
+            const slots = [];
+            document.querySelectorAll('.time-slot-row').forEach(row => {
+                const from = row.querySelector('.slot-from').value;
+                const to = row.querySelector('.slot-to').value;
+                if (from && to) {
+                    const [fh, fm] = from.split(':').map(Number);
+                    const [th, tm] = to.split(':').map(Number);
+                    slots.push({ fromMin: fh * 60 + fm, toMin: th * 60 + tm });
+                }
+            });
+            return slots;
+        }
+
+        function isInTimeSlot(date, slots) {
+            if (slots.length === 0) return true; // no slots = all allowed
+            const currentMin = date.getHours() * 60 + date.getMinutes();
+            return slots.some(s => currentMin >= s.fromMin && currentMin < s.toMin);
+        }
+
+        // Set default start time
         const now = new Date();
         const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById('startTime').value = localISO;
 
-        // Toggle upto row
-        document.getElementById('repeatMode').addEventListener('change', function() {
-            document.getElementById('uptoRow').style.display = this.value === 'upto' ? 'grid' : 'none';
+        // Toggle cycle inputs and sub-sections
+        ['H','D','W','M'].forEach(id => {
+            document.getElementById('enable' + id).addEventListener('change', function() {
+                document.getElementById('max' + id).disabled = !this.checked;
+                document.getElementById('cycle' + id).classList.toggle('active', this.checked);
+                const sub = document.getElementById('cycle' + id + 'Sub');
+                if (sub) {
+                    sub.style.display = this.checked ? 'block' : 'none';
+                    // Clear time slots when Hour is unchecked
+                    if (id === 'H' && !this.checked) {
+                        document.getElementById('timeSlots').innerHTML = '';
+                    }
+                }
+                updateRepeatBucketOptions();
+            });
         });
 
-        document.getElementById('repeatEnabled').addEventListener('change', function() {
-            const fields = document.querySelectorAll('#repeatBucket, #repeatMode, #maxTotal');
-            fields.forEach(f => f.disabled = !this.checked);
-            if (!this.checked) {
-                document.getElementById('uptoRow').style.display = 'none';
-            }
-        });
-
-        // Bucket hierarchy: repeat bucket must be >= cycle bucket
-        const bucketOrder = ['Min', 'H', 'D', 'W', 'M', 'Y'];
-
-        document.getElementById('frequencyUnit').addEventListener('change', function() {
-            updateRepeatBucketOptions();
-        });
+        // Update repeat bucket options based on highest active cycle
+        const bucketOrder = ['H','D','W','M'];
+        const bucketLabels = { 'H': 'Hour', 'D': 'Day', 'W': 'Week', 'M': 'Month' };
 
         function updateRepeatBucketOptions() {
-            const cycleUnit = document.getElementById('frequencyUnit').value;
+            let highestIndex = -1;
+            bucketOrder.forEach((id, idx) => {
+                if (document.getElementById('enable' + id).checked) {
+                    highestIndex = idx;
+                }
+            });
+
             const repeatSelect = document.getElementById('repeatBucket');
-            const cycleIndex = bucketOrder.indexOf(cycleUnit);
-
-            const labels = { 'Min': 'Minute', 'H': 'Hour', 'D': 'Day', 'W': 'Week', 'M': 'Month', 'Y': 'Year' };
-
+            const currentVal = repeatSelect.value;
             repeatSelect.innerHTML = '';
-            for (let i = cycleIndex; i < bucketOrder.length; i++) {
+
+            const startIdx = Math.max(highestIndex, 0);
+            for (let i = startIdx; i < bucketOrder.length; i++) {
                 const opt = document.createElement('option');
                 opt.value = bucketOrder[i];
-                opt.textContent = labels[bucketOrder[i]];
+                opt.textContent = bucketLabels[bucketOrder[i]];
                 repeatSelect.appendChild(opt);
+            }
+
+            // Try to keep previous selection, otherwise default to first
+            if ([...repeatSelect.options].some(o => o.value === currentVal)) {
+                repeatSelect.value = currentVal;
             }
         }
 
         updateRepeatBucketOptions();
+        // Set initial active state and sub visibility
+        document.getElementById('cycleH').classList.add('active');
+        document.getElementById('cycleD').classList.add('active');
+        document.getElementById('cycleHSub').style.display = 'block';
+        document.getElementById('cycleDSub').style.display = 'block';
 
-        function computeRepeatBucket(date, unit, multiplier, startDate) {
-            // Calculate how many units have passed since start, then group by multiplier
-            const diffMs = date - startDate;
-            let unitsPassed = 0;
-
+        function computeRepeatBucket(date, unit, multiplier) {
+            const y = date.getFullYear();
+            const m = date.getMonth();
+            const d = date.getDate();
+            const h = date.getHours();
             switch (unit) {
-                case 'Min': unitsPassed = Math.floor(diffMs / (60 * 1000)); break;
-                case 'H': unitsPassed = Math.floor(diffMs / (60 * 60 * 1000)); break;
-                case 'D': unitsPassed = Math.floor(diffMs / (24 * 60 * 60 * 1000)); break;
-                case 'W': unitsPassed = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000)); break;
-                case 'M': 
-                    unitsPassed = (date.getFullYear() - startDate.getFullYear()) * 12 + (date.getMonth() - startDate.getMonth());
-                    break;
-                case 'Y': unitsPassed = date.getFullYear() - startDate.getFullYear(); break;
+                case 'H': {
+                    const dayKey = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                    const bucket = Math.floor(h / multiplier);
+                    return `${dayKey}-RH${bucket}`;
+                }
+                case 'D': {
+                    const startOfYear = new Date(y, 0, 1);
+                    const dayOfYear = Math.floor((date - startOfYear) / (24*60*60*1000));
+                    const bucket = Math.floor(dayOfYear / multiplier);
+                    return `${y}-RD${bucket}`;
+                }
+                case 'W': {
+                    // Use ISO week number (weeks start on Monday)
+                    const isoWeek = getISOWeek(date);
+                    const bucket = Math.floor((isoWeek - 1) / multiplier);
+                    return `${y}-RW${bucket}`;
+                }
+                case 'M': {
+                    const bucket = Math.floor(m / multiplier);
+                    return `${y}-RM${bucket}`;
+                }
+                case 'Y': {
+                    const bucket = Math.floor(y / multiplier);
+                    return `RY${bucket}`;
+                }
             }
+        }
 
-            const bucketIndex = Math.floor(unitsPassed / multiplier);
-            return `${unit}-${bucketIndex}`;
+        function getISOWeek(date) {
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            // Set to nearest Thursday (ISO week starts Monday, week 1 contains Jan 4)
+            d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
+            const yearStart = new Date(d.getFullYear(), 0, 4);
+            return Math.ceil(((d - yearStart) / (24*60*60*1000) + 1) / 7);
         }
 
         function computeBucket(date, unit) {
@@ -535,93 +604,65 @@
             const d = String(date.getDate()).padStart(2, '0');
             const h = String(date.getHours()).padStart(2, '0');
             const min = String(date.getMinutes()).padStart(2, '0');
-
             switch (unit) {
                 case 'Min': return `${y}-${m}-${d}-${h}-${min}`;
                 case 'H': return `${y}-${m}-${d}-${h}`;
                 case 'D': return `${y}-${m}-${d}`;
                 case 'W':
-                    const startOfYear = new Date(y, 0, 1);
-                    const days = Math.floor((date - startOfYear) / (24 * 60 * 60 * 1000));
-                    const week = String(Math.ceil((days + startOfYear.getDay() + 1) / 7)).padStart(2, '0');
-                    return `${y}-W${week}`;
+                    const week = getISOWeek(date);
+                    return `${y}-W${String(week).padStart(2, '0')}`;
                 case 'M': return `${y}-${m}`;
                 case 'Y': return `${y}`;
             }
         }
 
-        function formatTime(date, unit) {
-            switch (unit) {
-                case 'Min':
-                    return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
-                case 'H':
-                    return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
-                case 'D':
-                    return date.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
-                case 'W':
-                    return date.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric' });
-                case 'M':
-                    return date.toLocaleString([], { month: 'long', year: 'numeric' });
-                case 'Y':
-                    return date.toLocaleString([], { year: 'numeric' });
-            }
+        function formatTime(date) {
+            return date.toLocaleString([], { weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false });
         }
 
         function simulate() {
-            const maxPerBucket = parseInt(document.getElementById('maxPerBucket').value);
-            const unit = document.getElementById('frequencyUnit').value;
-            const repeatEnabled = document.getElementById('repeatEnabled').checked;
-            const repeatMode = document.getElementById('repeatMode').value;
-            const repeatBucket = document.getElementById('repeatBucket').value;
-            const repeatMultiplier = parseInt(document.getElementById('repeatMultiplier').value) || 1;
-            const maxCycles = (repeatEnabled && repeatMode === 'upto') ? parseInt(document.getElementById('maxTotal').value) : 0;
-            const totalMaxView = parseInt(document.getElementById('totalMaxView').value);
-            const maxClick = 1; // always 1
-            const scopeValue = 'storeA'; // static
-            const campaignId = 'campId'; // static
             const triggerCount = parseInt(document.getElementById('triggerCount').value);
-            const clickOnTrigger = parseInt(document.getElementById('clickOnTrigger').value);
-            const startTime = new Date(document.getElementById('startTime').value);
             const triggerGap = parseInt(document.getElementById('triggerGap').value);
             const triggerGapUnit = document.getElementById('triggerGapUnit').value;
+            const startTime = new Date(document.getElementById('startTime').value);
+            const clickOnTrigger = parseInt(document.getElementById('clickOnTrigger').value);
+            const totalMaxView = parseInt(document.getElementById('totalMaxView').value);
 
-            // Allowed days
+            // Repeat config
+            const repeatMultiplier = parseInt(document.getElementById('repeatMultiplier').value) || 1;
+            const repeatBucketUnit = document.getElementById('repeatBucket').value;
+            const repeatMaxView = parseInt(document.getElementById('repeatMaxView').value);
+
+            // Get active cycle levels
+            const levels = [];
+            ['H','D','W','M'].forEach(id => {
+                if (document.getElementById('enable' + id).checked) {
+                    levels.push({ unit: id, max: parseInt(document.getElementById('max' + id).value) });
+                }
+            });
+
+            // Filters
             const dayCheckboxes = document.querySelectorAll('#daysRow input[type="checkbox"]');
             const allowedDays = [];
             dayCheckboxes.forEach(cb => { if (cb.checked) allowedDays.push(cb.value); });
-            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-            // Allowed hours
             const hourCheckboxes = document.querySelectorAll('#hoursRow input[type="checkbox"]');
             const allowedHours = [];
             hourCheckboxes.forEach(cb => { if (cb.checked) allowedHours.push(parseInt(cb.value)); });
 
-            // Campaign duration
-            const campaignDuration = parseInt(document.getElementById('campaignDuration').value);
-            const campaignDurationUnit = document.getElementById('campaignDurationUnit').value;
-            let endTime = null;
-            if (campaignDuration > 0) {
-                endTime = new Date(startTime);
-                switch (campaignDurationUnit) {
-                    case 'day': endTime.setDate(endTime.getDate() + campaignDuration); break;
-                    case 'week': endTime.setDate(endTime.getDate() + (campaignDuration * 7)); break;
-                    case 'month': endTime.setMonth(endTime.getMonth() + campaignDuration); break;
-                }
-            }
+            // Time slots
+            const timeSlots = getTimeSlots();
 
-            const lc = `${maxPerBucket}${unit}`;
-
-            // Storage simulation
-            let storage = {
-                currentBucket: null,
-                currentRepeatBucket: null,
-                bucketViewCount: 0,
-                bucketClickCount: 0,
-                totalViewCount: 0,
-                totalClickCount: 0,
-                cycleCount: 0,
-                cycleComplete: false
-            };
+            // Storage: per-level counters
+            let storage = {};
+            levels.forEach(l => {
+                storage[l.unit] = { currentBucket: null, viewCount: 0 };
+            });
+            let totalViews = 0;
+            let totalClicks = 0;
+            let repeatBucketCurrent = null;
+            let repeatViewCount = 0;
 
             let timeline = [];
             let shownCount = 0;
@@ -635,177 +676,128 @@
                     case 'day': triggerTime.setDate(triggerTime.getDate() + (i * triggerGap)); break;
                 }
 
-                const bucket = computeBucket(triggerTime, unit);
-                const rBucket = computeRepeatBucket(triggerTime, repeatBucket, repeatMultiplier, startTime);
                 const isClick = (clickOnTrigger > 0 && i + 1 === clickOnTrigger);
 
-                // Reset repeat bucket (cycle count) if repeat bucket changed
-                if (repeatEnabled && storage.currentRepeatBucket !== rBucket) {
-                    if (storage.currentRepeatBucket !== null) {
-                        storage.cycleCount++;
+                // Reset buckets per level
+                levels.forEach(l => {
+                    const bucket = computeBucket(triggerTime, l.unit);
+                    if (storage[l.unit].currentBucket !== bucket) {
+                        storage[l.unit].currentBucket = bucket;
+                        storage[l.unit].viewCount = 0;
                     }
-                    storage.currentRepeatBucket = rBucket;
-                    // New repeat bucket = fresh cycle
-                    storage.bucketViewCount = 0;
-                    storage.bucketClickCount = 0;
-                    storage.cycleComplete = false;
-                }
+                });
 
-                // Reset cycle bucket if changed (within same repeat bucket)
-                if (storage.currentBucket !== bucket) {
-                    storage.currentBucket = bucket;
+                // Repeat bucket
+                const rBucket = computeRepeatBucket(triggerTime, repeatBucketUnit, repeatMultiplier);
+                if (repeatBucketCurrent !== rBucket) {
+                    repeatBucketCurrent = rBucket;
+                    repeatViewCount = 0;
                 }
 
                 // Check logic
                 let blocked = false;
                 let reason = '';
 
-                // Day filter check (empty = all allowed)
                 const triggerDay = dayNames[triggerTime.getDay()];
                 if (allowedDays.length > 0 && !allowedDays.includes(triggerDay)) {
                     blocked = true;
-                    reason = `Not an allowed day (${triggerDay})`;
-                }
-                // Hour filter check (empty = all allowed)
-                else if (allowedHours.length > 0 && !allowedHours.includes(triggerTime.getHours())) {
+                    reason = `Not allowed day (${triggerDay})`;
+                } else if (!isInTimeSlot(triggerTime, timeSlots)) {
                     blocked = true;
-                    reason = `Not an allowed hour (${triggerTime.getHours()}h)`;
-                }
-                // End time check
-                else if (endTime && triggerTime >= endTime) {
+                    reason = `Not in allowed time slot (${String(triggerTime.getHours()).padStart(2,'0')}:${String(triggerTime.getMinutes()).padStart(2,'0')})`;
+                } else if (totalMaxView > 0 && totalViews >= totalMaxView) {
                     blocked = true;
-                    reason = `Campaign ended (duration expired)`;
-                }
-                // Total max view check
-                else if (totalMaxView > 0 && storage.totalViewCount >= totalMaxView) {
+                    reason = `Total limit (${totalViews}/${totalMaxView})`;
+                } else if (totalClicks >= 1) {
                     blocked = true;
-                    reason = `Total view limit reached (${storage.totalViewCount}/${totalMaxView})`;
-                }
-                // Cycle limit check
-                else if (maxCycles > 0 && storage.cycleCount >= maxCycles) {
+                    reason = `Clicked — cycle ended`;
+                } else if (repeatMaxView > 0 && repeatViewCount >= repeatMaxView) {
                     blocked = true;
-                    reason = `All cycles exhausted (${storage.cycleCount}/${maxCycles} cycles)`;
-                }
-                // Cycle already complete — waiting for next repeat bucket
-                else if (storage.cycleComplete) {
-                    blocked = true;
-                    reason = `Cycle complete — waiting for next repeat (${storage.currentRepeatBucket})`;
-                }
-                // Bucket view limit (cycle completes when max views reached)
-                else if (maxPerBucket > 0 && storage.bucketViewCount >= maxPerBucket) {
-                    blocked = true;
-                    storage.cycleComplete = true;
-                    reason = `Cycle complete (${storage.bucketViewCount}/${maxPerBucket} views)`;
-                }
-                // Click limit
-                else if (maxClick > 0 && storage.totalClickCount >= maxClick) {
-                    blocked = true;
-                    storage.cycleComplete = true;
-                    reason = `Cycle ended by click`;
+                    reason = `Repeat cycle full (${repeatViewCount}/${repeatMaxView} this ${repeatMultiplier > 1 ? repeatMultiplier + ' ' : ''}${unitLabel(repeatBucketUnit)}${repeatMultiplier > 1 ? 's' : ''})`;
+                } else {
+                    // Check each level
+                    for (const l of levels) {
+                        if (storage[l.unit].viewCount >= l.max) {
+                            blocked = true;
+                            reason = `${unitLabel(l.unit)} limit (${storage[l.unit].viewCount}/${l.max})`;
+                            break;
+                        }
+                    }
                 }
 
                 if (!blocked) {
-                    storage.bucketViewCount++;
-                    storage.totalViewCount++;
+                    levels.forEach(l => { storage[l.unit].viewCount++; });
+                    totalViews++;
+                    repeatViewCount++;
                     shownCount++;
+                    if (isClick) totalClicks++;
 
-                    if (isClick) {
-                        storage.bucketClickCount++;
-                        storage.totalClickCount++;
-                        storage.cycleComplete = true; // click ends the cycle
-                    }
-
-                    // Check if this view completes the cycle
-                    if (maxPerBucket > 0 && storage.bucketViewCount >= maxPerBucket) {
-                        storage.cycleComplete = true;
-                    }
-
-                    reason = `View ${storage.bucketViewCount}/${maxPerBucket > 0 ? maxPerBucket : '∞'} | Cycle #${storage.cycleCount + 1}${maxCycles > 0 ? '/' + maxCycles : ''} | Total: ${storage.totalViewCount}${totalMaxView > 0 ? '/' + totalMaxView : ''}${isClick ? ' | CLICKED → cycle ends' : ''}`;
+                    const parts = levels.map(l => `${l.unit}:${storage[l.unit].viewCount}/${l.max}`);
+                    reason = parts.join(' | ') + ` | Total:${totalViews}`;
                 } else {
                     blockedCount++;
                 }
 
-                timeline.push({
-                    time: triggerTime,
-                    bucket: bucket,
-                    shown: !blocked,
-                    reason: reason,
-                    isClick: isClick,
-                    triggerNum: i + 1
-                });
+                timeline.push({ time: triggerTime, shown: !blocked, reason, isClick });
             }
 
-            // Build storage key
-            const scopePart = scopeValue ? `_${scopeValue}` : '';
-            const storageKey = `${campaignId}${scopePart}`;
-
-            // Render results
+            // Render
             let html = `<h2>Results</h2>`;
-
             html += `<div class="summary">`;
-            html += `<span class="key">lc:</span> <span class="value">${lc}</span><br>`;
-            html += `<span class="key">Meaning:</span> Show max <span class="value">${maxPerBucket > 0 ? maxPerBucket : '∞'}</span> views per <span class="value">${unitLabel(unit)}</span> (cycle)`;
-            if (repeatEnabled) {
-                const repeatLabel = repeatMultiplier > 1 ? `${repeatMultiplier} ${unitLabel(repeatBucket)}s` : unitLabel(repeatBucket);
-                if (maxCycles > 0) html += ` | Repeat every <span class="value">${repeatLabel}</span>, upto <span class="value">${maxCycles}</span> cycles`;
-                else html += ` | Repeat every <span class="value">${repeatLabel}</span> until campaign ends`;
+            html += `<span class="key">Active levels:</span> `;
+            html += levels.map(l => `<span class="value">${l.max}/${unitLabel(l.unit)}</span>`).join(' → ');
+            const repeatLabel = repeatMultiplier > 1 ? `${repeatMultiplier} ${unitLabel(repeatBucketUnit)}s` : unitLabel(repeatBucketUnit);
+            html += `<br><span class="key">Repeat:</span> every <span class="value">${repeatLabel}</span>`;
+            if (repeatMaxView > 0) html += ` | max <span class="value">${repeatMaxView}</span> views per repeat`;
+            if (totalMaxView > 0) html += `<br><span class="key">Total max:</span> <span class="value">${totalMaxView}</span>`;
+            if (allowedDays.length > 0) html += `<br><span class="key">Days:</span> <span class="value">${allowedDays.join(', ')}</span>`;
+            if (timeSlots.length > 0) {
+                const slotStrs = timeSlots.map(s => {
+                    const fh = String(Math.floor(s.fromMin/60)).padStart(2,'0');
+                    const fm = String(s.fromMin%60).padStart(2,'0');
+                    const th = String(Math.floor(s.toMin/60)).padStart(2,'0');
+                    const tm = String(s.toMin%60).padStart(2,'0');
+                    return `${fh}:${fm}–${th}:${tm}`;
+                });
+                html += `<br><span class="key">Time slots:</span> <span class="value">${slotStrs.join(', ')}</span>`;
             }
-            if (totalMaxView > 0) html += ` | Total max <span class="value">${totalMaxView}</span> views`;
-            html += ` | Click ends cycle`;
-            if (scopeValue) html += ` | Scope: <span class="value">${scopeValue}</span>`;
-            if (allowedDays.length < 7) html += `<br><span class="key">Allowed days:</span> <span class="value">${allowedDays.join(', ')}</span>`;
-            if (allowedHours.length < 24) html += `<br><span class="key">Allowed hours:</span> <span class="value">${allowedHours.join(', ')}h</span>`;
-            if (endTime) html += `<br><span class="key">Campaign ends:</span> <span class="value">${endTime.toLocaleString('en', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>`;
-            html += `<br><br>`;
-            html += `<span class="key">Shown:</span> <span class="value">${shownCount}</span> times<br>`;
-            html += `<span class="key">Blocked:</span> <span class="value">${blockedCount}</span> times<br>`;
+            html += `<br><br><span class="key">Shown:</span> <span class="value">${shownCount}</span> | <span class="key">Blocked:</span> <span class="value">${blockedCount}</span>`;
             html += `</div>`;
 
-            html += `<div class="storage-key">`;
-            html += `<span class="label">Storage Key:</span>`;
-            html += `${storageKey}`;
-            html += `</div>`;
+            html += `<div class="storage-key"><span class="label">Storage (final):</span>${JSON.stringify(storage, null, 2)}\nTotal views: ${totalViews}</div>`;
 
-            html += `<div class="storage-key" style="margin-top: 8px;">`;
-            html += `<span class="label">Stored Value (final state):</span>`;
-            html += JSON.stringify(storage, null, 2);
-            html += `</div>`;
+            html += `<div class="timeline"><h3>Timeline</h3>`;
+            html += `<div class="timeline-row header"><span>Time</span><span>Status</span><span>Details</span></div>`;
 
-            html += `<div class="timeline">`;
-            html += `<h3>Timeline (${triggerCount} triggers, every ${triggerGap} ${triggerGapUnit})</h3>`;
-            html += `<div class="timeline-row header"><span>Time</span><span>Status</span><span>Bucket</span><span>Details</span></div>`;
-
-            let prevRepeatBucket = null;
+            let prevDay = null;
+            let prevRepeat = null;
             for (const entry of timeline) {
-                const entryRepeatBucket = computeBucket(entry.time, repeatBucket);
-                if (prevRepeatBucket !== null && entryRepeatBucket !== prevRepeatBucket) {
-                    html += `<div class="timeline-separator"><span>${unitLabel(repeatBucket).toUpperCase()} ${entryRepeatBucket}</span></div>`;
+                const rB = computeRepeatBucket(entry.time, repeatBucketUnit, repeatMultiplier);
+                if (prevRepeat !== null && rB !== prevRepeat) {
+                    html += `<div class="timeline-separator"><span>REPEAT CYCLE: ${rB}</span></div>`;
                 }
-                prevRepeatBucket = entryRepeatBucket;
+                prevRepeat = rB;
 
-                const statusClass = entry.shown ? 'show' : 'block';
-                html += `<div class="timeline-row ${statusClass}">`;
-                html += `<span>${formatTime(entry.time, unit)}</span>`;
-                html += `<span><span class="badge ${statusClass}">${entry.shown ? 'SHOW' : 'BLOCK'}</span>${entry.isClick ? ' 👆' : ''}</span>`;
-                html += `<span style="font-size:11px; color:#888;">${entry.bucket}</span>`;
+                const day = entry.time.toLocaleDateString();
+                if (prevDay !== null && day !== prevDay) {
+                    html += `<div class="timeline-separator"><span>${day}</span></div>`;
+                }
+                prevDay = day;
+
+                const cls = entry.shown ? 'show' : 'block';
+                html += `<div class="timeline-row ${cls}">`;
+                html += `<span>${formatTime(entry.time)}</span>`;
+                html += `<span><span class="badge ${cls}">${entry.shown ? 'SHOW' : 'BLOCK'}</span>${entry.isClick ? ' 👆' : ''}</span>`;
                 html += `<span class="reason">${entry.reason}</span>`;
                 html += `</div>`;
             }
-
             html += `</div>`;
 
             document.getElementById('results').innerHTML = html;
         }
 
         function unitLabel(unit) {
-            switch (unit) {
-                case 'Min': return 'minute';
-                case 'H': return 'hour';
-                case 'D': return 'day';
-                case 'W': return 'week';
-                case 'M': return 'month';
-                case 'Y': return 'year';
-            }
+            switch(unit) { case 'Min': return 'min'; case 'H': return 'hour'; case 'D': return 'day'; case 'W': return 'week'; case 'M': return 'month'; case 'Y': return 'year'; }
         }
     </script>
 </body>
