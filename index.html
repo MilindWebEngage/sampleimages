@@ -231,6 +231,24 @@
         <div class="panel">
             <h2>Lifecycle</h2>
 
+            <!-- Section 0: Campaign Dates -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <span class="collapse-icon">▶</span>
+                    <span>Campaign Dates</span>
+                </div>
+                <div class="collapsible-content" style="display:none;">
+                    <div class="field">
+                        <label>Start date (empty = today)</label>
+                        <input type="date" id="campaignStartDate">
+                    </div>
+                    <div class="field">
+                        <label>End date (empty = no end)</label>
+                        <input type="date" id="campaignEndDate">
+                    </div>
+                </div>
+            </div>
+
             <!-- Section 1: Max View -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
@@ -603,6 +621,7 @@
         document.getElementById('cycleDSub').style.display = 'none';
 
         function computeRepeatBucket(date, unit, multiplier) {
+            const campaignStart = getCampaignStartDate();
             const y = date.getFullYear();
             const m = date.getMonth();
             const d = date.getDate();
@@ -614,26 +633,33 @@
                     return `${dayKey}-RH${bucket}`;
                 }
                 case 'D': {
-                    const startOfYear = new Date(y, 0, 1);
-                    const dayOfYear = Math.floor((date - startOfYear) / (24*60*60*1000));
-                    const bucket = Math.floor(dayOfYear / multiplier);
-                    return `${y}-RD${bucket}`;
+                    const diffDays = Math.floor((date - campaignStart) / (24*60*60*1000));
+                    const bucket = Math.floor(diffDays / multiplier);
+                    return `RD${bucket}`;
                 }
                 case 'W': {
-                    // Use ISO week number (weeks start on Monday)
-                    const isoWeek = getISOWeek(date);
-                    const bucket = Math.floor((isoWeek - 1) / multiplier);
-                    return `${y}-RW${bucket}`;
+                    const diffDays = Math.floor((date - campaignStart) / (24*60*60*1000));
+                    const diffWeeks = Math.floor(diffDays / 7);
+                    const bucket = Math.floor(diffWeeks / multiplier);
+                    return `RW${bucket}`;
                 }
                 case 'M': {
-                    const bucket = Math.floor(m / multiplier);
-                    return `${y}-RM${bucket}`;
-                }
-                case 'Y': {
-                    const bucket = Math.floor(y / multiplier);
-                    return `RY${bucket}`;
+                    const diffMonths = (date.getFullYear() - campaignStart.getFullYear()) * 12 + (date.getMonth() - campaignStart.getMonth());
+                    const bucket = Math.floor(diffMonths / multiplier);
+                    return `RM${bucket}`;
                 }
             }
+        }
+
+        function getCampaignStartDate() {
+            const val = document.getElementById('campaignStartDate').value;
+            if (val) {
+                return new Date(val + 'T00:00:00');
+            }
+            // Default to today at midnight
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return today;
         }
 
         function getISOWeek(date) {
@@ -746,7 +772,13 @@
                 let reason = '';
 
                 const triggerDay = dayNames[triggerTime.getDay()];
-                if (allowedDays.length > 0 && !allowedDays.includes(triggerDay)) {
+                const campaignEndVal = document.getElementById('campaignEndDate').value;
+                const campaignEnd = campaignEndVal ? new Date(campaignEndVal + 'T23:59:59') : null;
+
+                if (campaignEnd && triggerTime > campaignEnd) {
+                    blocked = true;
+                    reason = `Campaign ended (${campaignEndVal})`;
+                } else if (allowedDays.length > 0 && !allowedDays.includes(triggerDay)) {
                     blocked = true;
                     reason = `Not allowed day (${triggerDay})`;
                 } else if (!isInTimeSlot(triggerTime, timeSlots)) {
@@ -919,7 +951,13 @@
             let reason = '';
 
             const triggerDay = dayNames[triggerTime.getDay()];
-            if (allowedDays.length > 0 && !allowedDays.includes(triggerDay)) {
+            const campaignEndVal = document.getElementById('campaignEndDate').value;
+            const campaignEnd = campaignEndVal ? new Date(campaignEndVal + 'T23:59:59') : null;
+
+            if (campaignEnd && triggerTime > campaignEnd) {
+                blocked = true;
+                reason = `Campaign ended (${campaignEndVal})`;
+            } else if (allowedDays.length > 0 && !allowedDays.includes(triggerDay)) {
                 blocked = true;
                 reason = `Not allowed day (${triggerDay})`;
             } else if (!isInTimeSlot(triggerTime, timeSlots)) {
