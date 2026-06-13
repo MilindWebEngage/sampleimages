@@ -11,7 +11,7 @@
         "timeSpent": 0,
         "rules": {
           "pageRuleCode": "true",
-          "sessionRuleCode": "(($we_getData(\"android\"->\"sdk_version\") > 2.9))",
+          "sessionRuleCode": "true",
           "eventRuleCode": "(  (  (  (  ($we_exists($we_getData(\"event\"->\"Outlet_visit\"->\"Outlet_visit\")))  ) ) ) )"
         },
         "showOnExit": false,
