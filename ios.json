@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Normal Text",
+    "body": {
+      "expandableDetails": {
+        "category": "19db52de",
+        "style": "BIG_TEXT",
+        "rt": "Simple Text",
+        "bckColor": "",
+        "rm": "Simple Desc",
+        "message": "Description - description",
+        "ratingScale": 5
+      },
+      "source": "webengage",
+      "cta_list": [
+        {
+          "mainCta": {
+            "ctaId": "main",
+            "deeplink": "sample_deeplink"
+          }
+        }
+      ],
+      "customData": [
+        {
+          "key": "provider",
+          "value": "APNS"
+        }
+      ],
+      "notification_id": "4fao8ok",
+      "aps": {
+        "content-available": 1,
+        "mutable-content": 1,
+        "category": "19db52de"
+      },
+      "experiment_id": "test_exp_id",
+      "license_code": "sample_license_code"
+    }
+  }
+]
