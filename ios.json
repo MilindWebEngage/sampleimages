@@ -26,7 +26,7 @@
           "value": "APNS"
         }
       ],
-      "notification_id": "4fao8ok",
+      "notification_id": "test",
       "aps": {
         "content-available": 1,
         "mutable-content": 1,
@@ -34,6 +34,85 @@
       },
       "experiment_id": "test_exp_id",
       "license_code": "sample_license_code"
+    }
+  },
+  {
+    "name": "Tiles",
+    "body": {
+      "notification_id": "test",
+      "expandableDetails": {
+        "category": "TILES",
+        "style": "TILES",
+        "rt": "<!DOCTYPE html><html><head></head><body>Test</body></html>",
+        "bckColor": "",
+        "rm": "<!DOCTYPE html><html><head></head><body>Test</body></html>",
+        "message": "season 2",
+        "rst": "<font color = '#ff0000'>summary</font>",
+        "tiles": [
+          {
+            "image": "https://media.tenor.com/zm84hkclQZ4AAAAi/pikachu-hello.gif",
+            "actionText": "Item 1 - Copy",
+            "id": "icon1-id",
+            "type": "CUSTOM",
+            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+          },
+          {
+            "image": "https://media.tenor.com/hMQgeiW1JsYAAAAi/shiny-gengar-ig.gif",
+            "actionText": "Item 2 - Deeplink",
+            "id": "icon2-id",
+            "type": "EXTERNAL_URL",
+            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+          },
+          {
+            "image": "https://media.tenor.com/O8iH_xXQxmIAAAAi/spin-charmander.gif",
+            "actionText": "Item 3 - Snooze",
+            "id": "icon3-id",
+            "type": "CUSTOM",
+            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+          },
+          {
+            "image": "https://media.tenor.com/FzFIAi18mAIAAAAi/pokemon.gif",
+            "actionText": "Item 4 - Call",
+            "id": "icon4-id",
+            "type": "CUSTOM",
+            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+          },
+          {
+            "image": "https://media.tenor.com/XH4jYp3jyJcAAAAi/pokemon-thankyou.gif",
+            "actionText": "Item 5 - Share",
+            "id": "icon5-id",
+            "type": "CUSTOM",
+            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+          }
+        ]
+      },
+      "license_code": "Test",
+      "experiment_id": "Test",
+      "source": "webengage",
+      "cta_list": [
+        {
+          "mainCta": {
+            "ctaId": "main",
+            "deeplink": "test"
+          }
+        }
+      ],
+      "customData": [
+        {
+          "key": "provider",
+          "value": "APNS"
+        }
+      ],
+      "aps": {
+        "content-available": 1,
+        "alert": {
+          "title": "Test",
+          "body": "Test"
+        },
+        "mutable-content": 1,
+        "category": "TILES",
+        "sound": "default"
+      }
     }
   }
 ]
