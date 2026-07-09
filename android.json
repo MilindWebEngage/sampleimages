@@ -1,0 +1,343 @@
+[
+  {
+    "name": "Normal Text",
+    "body": {
+      "identifier": "SamplePush",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "bckColor": "#ffffff",
+      "s": false,
+      "expandableDetails": {
+        "ratingScale": 5,
+        "style": "BIG_TEXT",
+        "rt": "Title",
+        "rm": "Message",
+        "cta3": {
+          "actionText": "Open Google",
+          "id": "id-3",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwww.google.com"
+        },
+        "cta2": {
+          "actionText": "Open WebEngage",
+          "id": "id-2",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+        },
+        "cta1": {
+          "actionText": "Open Facebook",
+          "id": "id-1",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwww.facebook.com"
+        }
+      },
+      "rt": "Title",
+      "rm": "Message",
+      "rst": "Summary",
+      "priority": null,
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": "EXTERNAL_URL",
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "Banner",
+    "body": {
+      "identifier": "SamplePush-Banner",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "bckColor": "#ffffff",
+      "s": false,
+      "expandableDetails": {
+        "image": "https://webengage.com/banner.jpg",
+        "ratingScale": 5,
+        "style": "BIG_PICTURE",
+        "rt": "Title",
+        "rm": "Message",
+        "rst": "Summary",
+        "cta3": {
+          "actionText": "Open App",
+          "id": "id-3",
+          "type": "DEEP_LINK",
+          "actionLink": "we://open"
+        },
+        "cta2": {
+          "actionText": "Open WebEngage",
+          "id": "id-2",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+        },
+        "cta1": {
+          "actionText": "Open Facebook",
+          "id": "id-1",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwww.facebook.com"
+        }
+      },
+      "rt": "Title",
+      "rm": "Message",
+      "rst": "Summary",
+      "priority": null,
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": "EXTERNAL_URL",
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "Carousel",
+    "body": {
+      "identifier": "SamplePush-Carousel",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "bckColor": "#ffffff",
+      "s": false,
+      "expandableDetails": {
+        "ast": 0,
+        "mode": "AUTO",
+        "ratingScale": 5,
+        "style": "CAROUSEL_V1",
+        "rt": "Title",
+        "rst": "Summary",
+        "rm": "Message",
+        "items": [
+          {
+            "image": "https://webengage.com/1.jpg",
+            "actionText": "Open 1",
+            "id": "1",
+            "type": "EXTERNAL_URL",
+            "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+          }
+        ]
+      },
+      "rt": "Title",
+      "rst": "Summary",
+      "rm": "Message",
+      "priority": null,
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": null,
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "Rating",
+    "body": {
+      "identifier": "SamplePush-Rating",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "bckColor": "#ffffff",
+      "s": false,
+      "expandableDetails": {
+        "image": "https://webengage.com/banner.jpg",
+        "ratingScale": 5,
+        "style": "RATING_V1",
+        "rt": "Title",
+        "rst": "Summary",
+        "rm": "Message",
+        "content": {
+          "title": "Rate Us",
+          "message": "Please rate",
+          "textColor": "#000000",
+          "bckColor": "#ffffff"
+        },
+        "submitCTA": {
+          "actionText": "Submit"
+        }
+      },
+      "rt": "Title",
+      "rst": "Summary",
+      "rm": "Message",
+      "priority": null,
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": "EXTERNAL_URL",
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "Timer",
+    "body": {
+      "identifier": "SamplePush-Timer",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "title": "Timer Title",
+      "message": "Timer Message",
+      "expandableDetails": {
+        "image": "https://webengage.com/banner.jpg",
+        "style": "TIMER",
+        "dr": "2025-12-31T23:59:59",
+        "tz": "USER",
+        "tc": "#000000",
+        "pc": "#ffffff",
+        "cta1": {
+          "actionText": "Open",
+          "id": "1",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+        }
+      },
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": null,
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": "NOTIFICATION",
+      "customEventData": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "Progress Bar",
+    "body": {
+      "identifier": "SamplePush-ProgressBar",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "title": "Progress Title",
+      "message": "Progress Message",
+      "expandableDetails": {
+        "image": "https://webengage.com/banner.jpg",
+        "style": "PROGRESS_BAR",
+        "dr": "2025-12-31T23:59:59",
+        "tz": "USER",
+        "tc": "#000000",
+        "pc": "#ffffff",
+        "cta1": {
+          "actionText": "Open",
+          "id": "1",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+        }
+      },
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": null,
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": "NOTIFICATION",
+      "customEventData": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "Big Timer",
+    "body": {
+      "identifier": "SamplePush-BigTimer",
+      "image": null,
+      "custom": [
+        {
+          "value": "https://webengage.com",
+          "key": "Click here"
+        }
+      ],
+      "title": "Big Timer Title",
+      "message": "Big Timer Message",
+      "expandableDetails": {
+        "image": "https://webengage.com/banner.jpg",
+        "style": "BIG_TIMER",
+        "dr": "2025-12-31T23:59:59",
+        "tz": "USER",
+        "tc": "#000000",
+        "pc": "#ffffff",
+        "cta1": {
+          "actionText": "Open",
+          "id": "1",
+          "type": "EXTERNAL_URL",
+          "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+        }
+      },
+      "cta": {
+        "actionText": null,
+        "id": "0",
+        "type": null,
+        "templateId": null,
+        "actionLink": "w:\\/\\/p\\/open_url_in_browser\\/https%3A%2F%2Fwebengage.com"
+      },
+      "timeToLive": 0,
+      "messageAction": "NOTIFICATION",
+      "customEventData": null,
+      "experimentId": "1",
+      "packageName": "com.webengage.production",
+      "license_code": "~2024b75c"
+    }
+  },
+  {
+    "name": "PUSH TILES",
+    "body": {
+      
+    }
+  }
+]
