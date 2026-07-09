@@ -50,8 +50,8 @@
       "timeToLive": 0,
       "messageAction": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
@@ -107,8 +107,8 @@
       "timeToLive": 0,
       "messageAction": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
@@ -156,8 +156,8 @@
       "timeToLive": 0,
       "messageAction": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
@@ -204,8 +204,8 @@
       "timeToLive": 0,
       "messageAction": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
@@ -246,8 +246,8 @@
       "messageAction": "NOTIFICATION",
       "customEventData": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
@@ -288,8 +288,8 @@
       "messageAction": "NOTIFICATION",
       "customEventData": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
@@ -330,8 +330,8 @@
       "messageAction": "NOTIFICATION",
       "customEventData": null,
       "experimentId": "1",
-      "packageName": "com.webengage.production",
-      "license_code": "~2024b75c"
+      "packageName": "YOUR_PACKAGE_NAME",
+      "license_code": "YOUR_LC"
     }
   },
   {
