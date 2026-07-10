@@ -3,9 +3,39 @@
   "gbp": "https://msdk-files.webengage.com/sdk/2/0.1/",
   "domain": "Shubham Naidu",
   "tzo": 19800,
-  "grs": ["fonts/mwidget.ttf", "js/notification-prepare.js"],
+  "grs": [
+    "fonts/mwidget.ttf",
+    "js/notification-prepare.js"
+  ],
   "notificationRuleList": [
     [
+      {
+        "excludeUCG": false,
+        "timeSpent": 0,
+        "rules": {
+          "pageRuleCode": "true",
+          "sessionRuleCode": "(($we_getData(\"android\"->\"sdk_version\") >= 2.9))"
+        },
+        "showOnExit": false,
+        "totalTimeOnSite": 0,
+        "variations": [
+          {
+            "layout": "1af57682",
+            "resources": [
+              "https://afiles.webengage.com/d3a4b5a9/31341d64-9163-4b44-8752-9e9f0bdf66b3.png"
+            ],
+            "lmts": 1783638977000,
+            "id": "~5583c94b",
+            "sampling": 100
+          }
+        ],
+        "notificationEncId": "2nf2ho8",
+        "creationTimestamp": "2026-07-10 10:10:05.0",
+        "fc": true,
+        "skipTargetPage": false,
+        "startTimestamp": 1783658700000,
+        "order": 0
+      },
       {
         "excludeUCG": false,
         "timeSpent": 0,
@@ -19,11 +49,21 @@
         "variations": [
           {
             "layout": "1af57682",
-            "resources": [],
+            "resources": [
+              
+            ],
             "lmts": 1779330605000,
             "id": "~10cb34557",
             "sampling": 100,
-            "tokens": [["event", "custom", "Outlet_visit", "custom", "Outlet_visit"]]
+            "tokens": [
+              [
+                "event",
+                "custom",
+                "Outlet_visit",
+                "custom",
+                "Outlet_visit"
+              ]
+            ]
           }
         ],
         "lc": "10D",
@@ -42,14 +82,33 @@
     "id_scope_1": {
       "value": "$we_getData(\"event\"->\"Outlet_visit\"->\"Outlet_visit\")",
       "variables": [
-        ["user", "system", "email"],
-        ["event", "custom", "Outlet_visit", "Outlet_visit"]
+        [
+          "user",
+          "system",
+          "email"
+        ],
+        [
+          "event",
+          "custom",
+          "Outlet_visit",
+          "Outlet_visit"
+        ]
       ]
     }
   },
-  "geoFences": {},
-  "events": {},
-  "ecl": [],
-  "cgDetails": {},
-  "properties": []
+  "geoFences": {
+    
+  },
+  "events": {
+    
+  },
+  "ecl": [
+    
+  ],
+  "cgDetails": {
+    
+  },
+  "properties": [
+    
+  ]
 }
