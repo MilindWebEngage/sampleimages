@@ -41,7 +41,7 @@
     "body": {
       "notification_id": "test",
       "expandableDetails": {
-        "category": "TILES",
+        "category": "19db52de",
         "style": "TILES",
         "rt": "<!DOCTYPE html><html><head></head><body>Test</body></html>",
         "bckColor": "",
@@ -110,7 +110,7 @@
           "body": "Test"
         },
         "mutable-content": 1,
-        "category": "TILES",
+        "category": "19db52de",
         "sound": "default"
       }
     }
