@@ -54,35 +54,35 @@
             "actionText": "Item 1 - Copy",
             "id": "icon1-id",
             "type": "CUSTOM",
-            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+            "actionLink": "https://webengage.com/1"
           },
           {
             "image": "https://media.tenor.com/hMQgeiW1JsYAAAAi/shiny-gengar-ig.gif",
             "actionText": "Item 2 - Deeplink",
             "id": "icon2-id",
             "type": "EXTERNAL_URL",
-            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+            "actionLink": "https://webengage.com/2"
           },
           {
             "image": "https://media.tenor.com/O8iH_xXQxmIAAAAi/spin-charmander.gif",
             "actionText": "Item 3 - Snooze",
             "id": "icon3-id",
             "type": "CUSTOM",
-            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+            "actionLink": "https://webengage.com/3"
           },
           {
             "image": "https://media.tenor.com/FzFIAi18mAIAAAAi/pokemon.gif",
             "actionText": "Item 4 - Call",
             "id": "icon4-id",
             "type": "CUSTOM",
-            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+            "actionLink": "https://webengage.com/4"
           },
           {
             "image": "https://media.tenor.com/XH4jYp3jyJcAAAAi/pokemon-thankyou.gif",
             "actionText": "Item 5 - Share",
             "id": "icon5-id",
             "type": "CUSTOM",
-            "actionLink": "w://p/open_url_in_browser/http%3A%2F%2Fwebengage.com"
+            "actionLink": "https://webengage.com/5"
           }
         ]
       },
